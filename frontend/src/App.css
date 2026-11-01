@@ -1,0 +1,13 @@
+::selection {
+  color: #f5f5ef;
+  background: #244d3a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

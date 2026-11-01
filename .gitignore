@@ -1,0 +1,15 @@
+node_modules/
+dist/
+**/.venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+*.local
+backend/chroma_db/
+backend/data/chroma_db/
+backend/.cache/huggingface/
+chroma_db/
+.pytest_cache/

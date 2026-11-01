@@ -1,0 +1,90 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      function ownsProfile() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      allow get: if ownsProfile();
+      allow list: if false;
+      allow create: if ownsProfile()
+        && request.resource.data.keys().hasAll(['uid', 'name', 'email', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'email', 'createdAt'])
+        && request.resource.data.uid == userId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    match /users/{userId}/conversations/{conversationId} {
+      function ownsConversation() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+
+      allow get, list: if ownsConversation();
+      allow create: if ownsConversation()
+        && request.resource.data.keys().hasAll(['title', 'createdAt', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['title', 'createdAt', 'updatedAt'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if ownsConversation()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        function ownsConversation() {
+          return request.auth != null && request.auth.uid == userId;
+        }
+
+        function validMessageMetadata() {
+          return !('metadata' in request.resource.data)
+            || (
+              request.resource.data.metadata is map
+              && request.resource.data.metadata.keys().hasAll(['kind', 'problem'])
+              && request.resource.data.metadata.keys().hasOnly([
+                'kind',
+                'problem',
+                'remedies',
+                'selectedRemedy',
+                'sources'
+              ])
+              && request.resource.data.metadata.kind in ['recommendations', 'remedy_detail', 'follow_up']
+              && request.resource.data.metadata.problem is string
+              && request.resource.data.metadata.problem.size() > 0
+              && request.resource.data.metadata.problem.size() <= 2000
+              && (!('remedies' in request.resource.data.metadata)
+                || (request.resource.data.metadata.remedies is list
+                  && request.resource.data.metadata.remedies.size() <= 3))
+              && (!('selectedRemedy' in request.resource.data.metadata)
+                || request.resource.data.metadata.selectedRemedy is map)
+              && (!('sources' in request.resource.data.metadata)
+                || (request.resource.data.metadata.sources is list
+                  && request.resource.data.metadata.sources.size() <= 10))
+            );
+        }
+
+        allow get, list: if ownsConversation();
+        allow create: if ownsConversation()
+          && request.resource.data.keys().hasAll(['role', 'content', 'timestamp'])
+          && request.resource.data.keys().hasOnly(['role', 'content', 'timestamp', 'metadata'])
+          && request.resource.data.role in ['user', 'assistant']
+          && request.resource.data.content is string
+          && request.resource.data.content.size() > 0
+          && request.resource.data.content.size() <= 10000
+          && request.resource.data.timestamp is timestamp
+          && request.resource.data.timestamp <= request.time + duration.value(1, 'm')
+          && validMessageMetadata();
+        allow update, delete: if false;
+      }
+    }
+  }
+}

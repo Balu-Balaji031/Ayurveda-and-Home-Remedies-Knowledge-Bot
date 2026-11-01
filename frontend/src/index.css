@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Segoe UI", sans-serif;
+  color: #20392e;
+  background: #f5f5ef;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.auth-input {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #c8d0c2;
+  border-radius: 2px;
+  background: #fffefa;
+  padding: 0.7rem 0.8rem;
+  color: #20392e;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.auth-input:focus-visible {
+  border-color: #31543c;
+  outline: 2px solid #31543c;
+  outline-offset: 2px;
+}
+
+.auth-submit {
+  display: flex;
+  min-height: 48px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #244d3a;
+  border-radius: 2px;
+  background: #244d3a;
+  padding: 0.75rem 1rem;
+  color: #fffefa;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-submit:hover:not(:disabled) {
+  background: #193d2c;
+}
+
+.auth-submit:focus-visible {
+  outline: 2px solid #31543c;
+  outline-offset: 3px;
+}
+
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

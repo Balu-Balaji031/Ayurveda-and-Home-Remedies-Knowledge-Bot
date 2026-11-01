@@ -1,0 +1,1 @@
+"""RAG package placeholders; no pipeline is implemented yet."""
