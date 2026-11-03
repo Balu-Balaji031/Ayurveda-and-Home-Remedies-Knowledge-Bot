@@ -65,7 +65,7 @@ flowchart TD
     F --> G[Prompt and Safety Rules]
     G --> H[Gemini Primary Provider]
     H --> I[Validated Answer + Sources]
-    H -. Eligible temporary failure .-> J[Groq Fallback Provider]
+    H -.->|Eligible temporary failure| J[Groq Fallback Provider]
     J --> I
     I --> B
     K[PDF Reference Documents] --> L[PyMuPDF Extraction]
