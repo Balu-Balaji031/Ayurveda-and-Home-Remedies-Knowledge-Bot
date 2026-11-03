@@ -58,7 +58,7 @@ export class ChatApiError extends Error {
   }
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '')
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://ayurveda-and-home-remedies-knowledge-bot.onrender.com').replace(/\/+$/, '')
 export const MAX_CHAT_QUESTION_LENGTH = 2_000
 
 async function postWorkflow<T>(path: string, body: unknown): Promise<T> {

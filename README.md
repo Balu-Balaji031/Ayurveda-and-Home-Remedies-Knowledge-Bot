@@ -47,6 +47,12 @@ The API health check is available at `http://localhost:8000/health` and returns:
 
 Copy `frontend/.env.example` to `frontend/.env` and `backend/.env.example` to `backend/.env` when configuring local values. Frontend Firebase web app values belong in `frontend/.env`, which is ignored by Git. Configure `GEMINI_API_KEY` and `GEMINI_MODEL` in `backend/.env` for primary answer generation. Set `GROQ_API_KEY` and `GROQ_MODEL` there to enable fallback; the example model `openai/gpt-oss-20b` is listed in the [official Groq model documentation](https://console.groq.com/docs/models). Groq is called only for Gemini quota/rate-limit, listed server errors, timeout, or temporary connection failures; it is not used for authentication, configuration, or malformed-request errors. Provider credentials remain backend-only.
 
+## Vercel frontend and Render API
+
+Configure the Vercel project root directory as `frontend`. Add `VITE_API_BASE_URL` with the deployed Render API URL (`https://ayurveda-and-home-remedies-knowledge-bot.onrender.com`) and add the `VITE_FIREBASE_*` web-app settings from the Firebase project in Vercel's environment settings; do not commit `.env` files. Redeploy after changing these variables. The Vercel rewrite in `frontend/vercel.json` sends client-side routes such as `/chat` to the React app.
+
+The Render API must allow the exact production frontend origin `https://ayur-bot.vercel.app` in its CORS configuration. Firebase Authentication must also list `ayur-bot.vercel.app` as an authorized domain.
+
 ## Chat history security rules
 
 Chat data is stored under `users/{userId}/conversations/{conversationId}`. The root `firestore.rules` file limits access to the signed-in owner and allows optional structured remedy/source metadata on messages so selections and follow-up context can be restored. Create/enable Cloud Firestore for the existing Firebase project, then deploy the rules from the project root:
