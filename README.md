@@ -13,6 +13,12 @@ Built with React, FastAPI, Retrieval-Augmented Generation (RAG), ChromaDB, Gemin
 
 ---
 
+## Live Demo
+
+**Website:** [https://ayur-bot.vercel.app/](https://ayur-bot.vercel.app/)
+
+Try the deployed AyurBot application. Availability may depend on the backend service and configured AI provider quotas.
+
 ## Overview
 
 **AyurBot** is an AI-assisted knowledge application designed to help users explore Ayurveda and home-remedy information contained in a curated set of PDF documents.
