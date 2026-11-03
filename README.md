@@ -7,6 +7,8 @@ React/TypeScript frontend and FastAPI backend for the Ayurveda and Home Remedies
 - Node.js and npm
 - Python 3.10 or newer
 
+The existing `sentence-transformers/all-MiniLM-L6-v2` 384-dimensional embedding model is loaded lazily from a pinned, quantized ONNX artifact on CPU. This avoids importing PyTorch/CUDA in the API process while preserving the existing ChromaDB vector dimensions. The model and tokenizer are downloaded from Hugging Face on first retrieval, so the backend needs outbound network access and a writable cache directory.
+
 ## Frontend
 
 In a terminal at the project root:
